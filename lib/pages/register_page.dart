@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
   final VoidCallback onTap;
+
   RegisterPage({super.key, required this.onTap});
 
   @override
@@ -16,6 +17,7 @@ class _RegisterPageState extends State<RegisterPage> {
   // Text editing controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   // sign user up method
   void signUserUp() async {
@@ -29,12 +31,18 @@ class _RegisterPageState extends State<RegisterPage> {
       },
     );
 
+    // try creating the user
     try {
-      // Try creating the user
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
+      // check if password is confirmed
+      if (passwordController.text == confirmPasswordController.text) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+      } else {
+        // show error message, passwords don't match
+        showErrorMessage("Passwords don't match");
+      }
 
       // Pop the loading circle
       Navigator.pop(context);
@@ -92,6 +100,26 @@ class _RegisterPageState extends State<RegisterPage> {
         );
       }
     }
+  }
+
+  // show error message
+  void showErrorMessage(String message) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              )
+            ],
+          );
+        });
   }
 
   // Wrong email message popup
@@ -154,9 +182,10 @@ class _RegisterPageState extends State<RegisterPage> {
                   size: 100,
                 ),
                 const SizedBox(height: 50),
-                // welcome back, you've been missing
+
+                // let's create an account for you
                 const Text(
-                  'Welcome back you\'ve been missed',
+                  'Let\'s create an account for you!',
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 16,
@@ -180,9 +209,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   obscureText: true,
                 ),
 
+                const SizedBox(height: 10),
+
                 // confirm password textfield
                 MyTextField(
-                  controller: passwordController,
+                  controller: confirmPasswordController,
                   hintText: 'Confirm Password',
                   obscureText: true,
                 ),
@@ -205,8 +236,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 10),
 
-                // sign_in_button
+                // sign_up_button
                 MyButton(
+                  text: "Sign Up",
                   onTap: signUserUp,
                 ),
 
