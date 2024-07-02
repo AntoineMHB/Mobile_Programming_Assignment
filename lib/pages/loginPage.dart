@@ -1,6 +1,7 @@
 import 'package:calculator/components/my_button.dart';
 import 'package:calculator/components/my_textfield.dart';
 import 'package:calculator/components/square_tile.dart';
+import 'package:calculator/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -218,13 +219,15 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 50),
 
                 // google + apple sign in buttons
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // google button
-                    SquareTile(imagePath: 'lib/images/google_logo.png'),
+                    SquareTile(
+                        onTap: () => AuthService().signInWithGoogle(),
+                        imagePath: 'lib/images/google_logo.png'),
 
-                    SizedBox(
+                    const SizedBox(
                       width: 25,
                     ),
 

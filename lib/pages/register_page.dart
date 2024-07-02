@@ -1,6 +1,7 @@
 import 'package:calculator/components/my_button.dart';
 import 'package:calculator/components/my_textfield.dart';
 import 'package:calculator/components/square_tile.dart';
+import 'package:calculator/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -36,69 +37,30 @@ class _RegisterPageState extends State<RegisterPage> {
       // check if password is confirmed
       if (passwordController.text == confirmPasswordController.text) {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
         );
+        // Optionally, navigate to another page or show a success message
       } else {
         // show error message, passwords don't match
         showErrorMessage("Passwords don't match");
       }
-
-      // Pop the loading circle
-      Navigator.pop(context);
     } catch (e) {
       // Pop the loading circle
       Navigator.pop(context);
 
-      // Show appropriate error message based on exception type
+      // Handle exceptions
       if (e is FirebaseAuthException) {
-        if (e.code == 'user-not-found') {
-          // User not found
-          wrongEmailMessage();
-        } else if (e.code == 'wrong-password') {
-          // Wrong password
-          wrongPasswordMessage();
-        } else {
-          // Handle other FirebaseAuthExceptions
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text('Sign In Error'),
-                content: Text(e.message ?? 'Unknown error occurred'),
-                actions: <Widget>[
-                  TextButton(
-                    child: const Text('OK'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-        }
+        // Show error message based on exception type
+        showErrorMessage(e.message ?? 'An error occurred');
       } else {
         // Handle unexpected errors
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('Error'),
-              content: const Text(
-                  'An unexpected error occurred. Please try again later.'),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
+        showErrorMessage(
+            'An unexpected error occurred. Please try again later.');
       }
+    } finally {
+      // Make sure the loading dialog is always dismissed
+      Navigator.pop(context);
     }
   }
 
@@ -120,48 +82,6 @@ class _RegisterPageState extends State<RegisterPage> {
             ],
           );
         });
-  }
-
-  // Wrong email message popup
-  void wrongEmailMessage() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Incorrect Email'),
-          content: const Text('The email address you entered does not exist.'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  // Wrong password message popup
-  void wrongPasswordMessage() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Incorrect Password'),
-          content: const Text('The password you entered is incorrect.'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -275,21 +195,26 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 50),
 
                 // google + apple sign in buttons
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // google button
-                    SquareTile(imagePath: 'lib/images/google_logo.png'),
-
-                    SizedBox(
-                      width: 25,
+                    SquareTile(
+                      onTap: () => AuthService().signInWithGoogle(),
+                      imagePath: 'lib/images/google_logo.png',
                     ),
 
+                    const SizedBox(width: 25),
+
                     // apple button
-                    SquareTile(imagePath: 'lib/images/apple_logo.png'),
+                    SquareTile(
+                      onTap: () {},
+                      imagePath: 'lib/images/apple_logo.png',
+                    ),
                   ],
                 ),
-                // not a member? register now
+
+                // already have an account? login now
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -297,16 +222,16 @@ class _RegisterPageState extends State<RegisterPage> {
                       'Already have an account?',
                       style: TextStyle(color: Colors.grey[700]),
                     ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    const Text(
-                      'Login now',
-                      style: TextStyle(
-                          color: Colors.blue, fontWeight: FontWeight.bold),
+                    const SizedBox(width: 4),
+                    GestureDetector(
+                      onTap: widget.onTap,
+                      child: const Text(
+                        'Login now',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ],
                 )
