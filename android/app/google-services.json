@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "920202807130",
+    "project_id": "authflutter-e424a",
+    "storage_bucket": "authflutter-e424a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:920202807130:android:10d8526fe4e03229095563",
+        "android_client_info": {
+          "package_name": "com.example.calculator"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRE2w1X3LWFQXERGewAESXKOKiGjXslMQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
