@@ -1,3 +1,5 @@
+import 'package:calculator/pages/loginPage.dart';
+import 'package:calculator/pages/register_page.dart';
 import 'package:flutter/material.dart';
 
 class LoginOrRegisterPage extends StatefulWidget {
@@ -21,9 +23,13 @@ class _LoginOrRegisterPageState extends State<LoginOrRegisterPage> {
   @override
   Widget build(BuildContext context) {
     if (showLoginPage) {
-      return LoginPage();
+      return LoginPage(
+        onTap: togglePages,
+      );
     } else {
-      return RegisterPage();
+      return RegisterPage(
+        onTap: togglePages,
+      );
     }
   }
 }

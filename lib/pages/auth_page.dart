@@ -1,4 +1,5 @@
 import 'package:calculator/pages/calculator.dart';
+import 'package:calculator/pages/login_or_register_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
