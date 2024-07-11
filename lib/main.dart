@@ -1,6 +1,8 @@
 import 'package:calculator/pages/auth_page.dart';
+import 'package:calculator/theme/theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
 
@@ -9,7 +11,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const Myapp());
+  runApp(ChangeNotifierProvider(
+      create: (context) => ThemeProvider(), child: const Myapp()));
 }
 
 class Myapp extends StatelessWidget {
@@ -17,9 +20,11 @@ class Myapp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: AuthPage(),
+      // home: HomePage(),
+      theme: Provider.of<ThemeProvider>(context).themeData,
     );
   }
 }

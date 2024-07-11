@@ -1,4 +1,4 @@
-import 'package:calculator/pages/calculator.dart';
+import 'package:calculator/pages/home_page.dart';
 import 'package:calculator/pages/login_or_register_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,8 @@ class AuthPage extends StatelessWidget {
       builder: (context, snapshot) {
         // user is logged in
         if (snapshot.hasData) {
-          return Calculator();
+          // return Calculator();
+          return HomePage();
         }
 
         // user is not logged in
