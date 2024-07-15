@@ -6,9 +6,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
-  RegisterPage({super.key, required this.onTap});
+  RegisterPage({super.key, this.onTap});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();

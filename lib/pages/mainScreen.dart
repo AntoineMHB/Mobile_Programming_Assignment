@@ -1,6 +1,8 @@
 import 'package:calculator/controller/NavigationController.dart';
-import 'package:calculator/models/calculator.dart';
-import 'package:calculator/models/loginPage.dart';
+import 'package:calculator/pages/calculator.dart';
+import 'package:calculator/pages/home_page.dart';
+import 'package:calculator/pages/loginPage.dart';
+import 'package:calculator/pages/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -17,7 +19,9 @@ class MainScreen extends StatelessWidget {
             index: controller.currentIndex.value,
             children: [
               LoginPage(),
+              RegisterPage(),
               Calculator(),
+              HomePage(),
             ],
           )),
       bottomNavigationBar: Container(
@@ -41,6 +45,7 @@ class MainScreen extends StatelessWidget {
                 text: 'Signup',
               ),
               GButton(icon: Icons.calculate, text: 'Calculator'),
+              GButton(icon: Icons.home, text: 'Home'),
             ],
             selectedIndex: controller.currentIndex.value,
             onTabChange: (index) {
